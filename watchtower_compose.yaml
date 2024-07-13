@@ -1,0 +1,29 @@
+#  Source:  https://containrrr.dev/watchtower/usage-overview
+#  Source:  https://github.com/containrrr/watchtower
+name: watchtower
+services:
+  watchtower:
+    image: docker.io/containrrr/watchtower:latest
+    #container-name: watchtower  #  is not allowed with watchtower
+    environment:
+      - TZ=Europe/Berlin
+      - HOSTNAMEE=${HOSTNAME}
+      - WATCHTOWER_CLEANUP=true
+      #- WATCHTOWER_INCLUDE_RESTARTING=true
+      - WATCHTOWER_INCLUDE_STOPPED=true
+      #- WATCHTOWER_SCHEDULE=0 0 4 * * SAT  #  Saturday at 04:00 hours
+      - WATCHTOWER_NO_STARTUP_MESSAGE=true
+      - WATCHTOWER_NOTIFICATIONS=email
+      - WATCHTOWER_NOTIFICATION_EMAIL_FROM=bash@dismail.de
+      - WATCHTOWER_NOTIFICATION_EMAIL_TO=de71364-sv-u8@bridgehead.it
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER=smtp.dismail.de
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT=587
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER=bash@dismail.de
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD=yiEJyFnm4VwPFdakDktHVsFzM8FJ6NuF7dCThuFoZ8FQdWRqHhBkPx2AbNwFoDo2o
+      - WATCHTOWER_NOTIFICATION_EMAIL_SUBJECTTAG=Watchtower on ${HOSTNAMEE}
+      - WATCHTOWER_NOTIFICATION_EMAIL_DELAY=2
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  #  allow watchtower to access the docker API to manage containers
+      - $HOME/.docker/config.json:/config.json     #  allow watchtower to use the docker credentials for Docker Hub; this also requires 'image:' to have the full path to the image
+    command: --interval 60  #  this sets the check interval (to use this, deactivate WATCHTOWER_SCHEDULE)
+    restart: unless-stopped

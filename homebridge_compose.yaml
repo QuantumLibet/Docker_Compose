@@ -1,0 +1,21 @@
+#  Source:  https://github.com/homebridge/homebridge
+name: homebridge
+services:
+  homebridge:
+    image: docker.io/homebridge/homebridge:latest
+    environment:
+      - TZ=Europe/Berlin
+      #- ENABLE_AVAHI=0    #  Disable mDNS
+      #- PUID=
+      #- PGID=
+      #- HOMEBRIDGE_CONFIG_UI=1
+      #- HOMEBRIDGE_CONFIG_UI_PORT=8581
+    logging:
+      driver: json-file
+      options:
+        max-size: "10mb"
+        max-file: "1"
+    volumes:
+      - ~/.config/containers/homebridge:/homebridge
+    network_mode: host
+    restart: unless-stopped
